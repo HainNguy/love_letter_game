@@ -25,7 +25,7 @@ In general, this game is about sending (as many) love letters as possible to a p
 - By 2-player games take 3 more cards and place aside
 -	Each player draw a card from a deck, secretly from other players
 -	Who was most recently on a date goes first (if tied, the youngest player wins the tie)
-##2.	How to play
+## 2.	How to play
 -	Series of rounds will be played
 -	After winning a round, the winner get a token for affection.
 -	To win the game, the winner must have:
