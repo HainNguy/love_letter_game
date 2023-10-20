@@ -6,9 +6,6 @@ public class Card {
         this.name = name;
         this.value = value;
     }
-    public Card(String name){
-        
-    }
 
     public String getName() {
         return name;
