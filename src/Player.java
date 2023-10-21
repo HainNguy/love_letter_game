@@ -13,7 +13,7 @@ public class Player {
         this.token = 0;
     }
 
-    public void drawCard(Card card, ArrayList<Card> deckOfCards){
+    public void drawCard(Card card, Deck deckOfCards){
         hand.add(card);
         deckOfCards.remove(card);
     }

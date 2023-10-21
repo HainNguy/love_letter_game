@@ -4,12 +4,14 @@ import java.util.Scanner;
 
 public class LoveLetterGame {
     ArrayList<Player> players = new ArrayList<>();
+    private Deck deckOfCards;
     private int tokenToWin = 0;
-    ArrayList<Card> deckOfCards = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
 
     public LoveLetterGame(){
+        this.deckOfCards = new Deck();
+        deckOfCards.shuffleDeck();
 
     }
     //get number of players
@@ -52,9 +54,15 @@ public class LoveLetterGame {
         System.out.println("Welcome to Love Letter. Please make sure that you have " +
                 "already read the game rules before playing the game" );
         getNumberOfPlayers();
-        Collections.shuffle(deckOfCards);
+        removeInitialCard();
         dealInitialCards();
-
+        whoPlaysFirst();
+    }
+    void removeInitialCard(){
+        System.out.println(" ...");
+    }
+    void whoPlaysFirst(){
+        System.out.println("...");
     }
     void dealInitialCards() {
         //If there are 2 players, 4 cards will be removed from deck.
