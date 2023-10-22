@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class LoveLetterGame {
@@ -45,11 +44,12 @@ public class LoveLetterGame {
         System.out.println("\\playCard - Discard a card ");
         System.out.println("\\showHand - show your hand");
         System.out.println("\\showScore - show your score");
+        System.out.println("\\help - show available commands");
     }
 
-    void showHand(){}
+    void showHand(Player currentPlayer){}
     void showScore(){}
-    void playCard(){}
+    void playCard(Player currentPlayer){}
     void startGame(){
         System.out.println("Welcome to Love Letter. Please make sure that you have " +
                 "already read the game rules before playing the game" );
@@ -82,8 +82,43 @@ public class LoveLetterGame {
 
     }
     void playGame(){
-        System.out.println("playing");
+        System.out.println("Enter \\help to see the game's commands.");
+        showCommands();
+
+
+        while(players.size() > 1){
+            Player currentPlayer = players.get(currentPlayerIndex);
+            boolean hasPlayedCard = false;
+
+            System.out.println("\n" + "It's "+ currentPlayer.getName() + "'s turn. Please enter your command:");
+            Scanner scanner = new Scanner(System.in);
+            String command = scanner.next();
+
+            if (command.equals("\\playCard")) {
+                if (!hasPlayedCard) {
+                    playCard(currentPlayer);
+                    hasPlayedCard = true;
+                } else {
+                    System.out.println("You have already played a card this turn. Choose another command.");
+                }
+            } else if (command.equals("\\showHand")) {
+                showHand(currentPlayer);
+            } else if (command.equals("\\showScore")) {
+                showScore();
+            } else if (command.equals("\\help")) {
+                showCommands();
+            } else {
+                System.out.println("Invalid command. Please use \\help to see the commands");
+            }
+
+            // Only increment the currentPlayerIndex if the current player has played a card
+            if (hasPlayedCard) {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            }
+        }
     }
+
+
     public int getTokenToWin() {
         return tokenToWin;
     }

@@ -17,6 +17,9 @@ public class Player {
         hand.add(card);
         deckOfCards.remove(card);
     }
+    public String getName(){
+        return name;
+    }
 
     public void playCard(){}
 
