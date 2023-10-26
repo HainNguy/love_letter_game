@@ -22,7 +22,7 @@ public class LoveLetterGame {
             playerCount = scanner.nextInt();
         }
         System.out.println("\nNow you are going to enter your names. " +
-                "Please use different player names. If some of you have" +
+                "Please use different player names. If some of you have " +
                 "the same names, please indicate with a number after your name," +
                 " for example: Alice1 and Alice2. ");
 
@@ -60,7 +60,7 @@ public class LoveLetterGame {
     }
 
     void whoPlaysFirst(){
-        System.out.println("...");
+
     }
     void dealInitialCards() {
         //If there are 2 players, 4 cards will be removed from deck.
