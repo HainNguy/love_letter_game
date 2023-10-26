@@ -54,13 +54,11 @@ public class LoveLetterGame {
         System.out.println("Welcome to Love Letter. Please make sure that you have " +
                 "already read the game rules before playing the game" );
         getNumberOfPlayers();
-        removeInitialCard();
+
         dealInitialCards();
         whoPlaysFirst();
     }
-    void removeInitialCard(){
-        System.out.println(" ...");
-    }
+
     void whoPlaysFirst(){
         System.out.println("...");
     }
