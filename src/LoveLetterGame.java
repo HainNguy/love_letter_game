@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class LoveLetterGame {
     ArrayList<Player> players = new ArrayList<>();
@@ -11,50 +13,64 @@ public class LoveLetterGame {
     public LoveLetterGame(){
         this.deckOfCards = new Deck();
         deckOfCards.shuffleDeck();
-
     }
     //get number of players
-    void getNumberOfPlayers(){
+     public int getNumberOfPlayers() {
         Scanner scanner = new Scanner(System.in);
-        int playerCount = 0;
-        while(playerCount < 2 || playerCount > 4){
-            System.out.print("Please enter the number of players (from 2 to 4) : ");
-            playerCount = scanner.nextInt();
-        }
-        System.out.println("\nNow you are going to enter your names. " +
-                "Please use different player names. If some of you have " +
-                "the same names, please indicate with a number after your name," +
-                " for example: Alice1 and Alice2. ");
-
-        for (int i = 0; i < playerCount; i++) {
-            System.out.print("Name for player " + (i+1) + ":");
-            String name = scanner.next();
-            players.add(new Player(name));
+        int numberOfPlayers;
+        while (true) {
+            System.out.print("Enter the number of players (2-4): ");
+            if (scanner.hasNextInt()) {
+                numberOfPlayers = scanner.nextInt();
+                if (numberOfPlayers >= 2 && numberOfPlayers <= 4) {
+                    return numberOfPlayers;
+                } else {
+                    System.out.println("Invalid number of players. Please enter a number between 2 and 4.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid number between 2 and 4.");
+                scanner.next();
+            }
         }
     }
-    void welcome(){
-        System.out.println(
-                "Wellcome to Love Letter." +
-                        "Make sure that you have already read the game rules before playing the game."+
-        "To see the game's commands with a short explanation, enter \\help" +
-                "or enter \\start to start the game");
+    void getPlayersNames(int numberOfPlayers){
+
+        Scanner scanner = new Scanner(System.in);
+
+        Set<String> usedNames = new HashSet<>();
+
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            String playerName;
+            do {
+                System.out.print("Enter the name for Player " + (i) + ": ");
+                playerName = scanner.nextLine();
+                // Check for duplicate names
+                if (isNameUsed(usedNames, playerName)) {
+                    System.out.println("Duplicate player names are not allowed. Please enter a unique name.");
+                }
+            } while (isNameUsed(usedNames, playerName));
+            usedNames.add(playerName.toLowerCase());
+            players.add(new Player(playerName));
+        }
+    }
+    // Check for case-insensitive used name.
+    private boolean isNameUsed(Set<String> usedNames, String name){
+        // Convert the provided name to lowercase for case-insensitive comparison
+        return usedNames.contains(name.toLowerCase());
     }
     void showCommands(){
-        System.out.println("\nAvailable commands:");
         System.out.println("\\playCard - Discard a card ");
-        System.out.println("\\showHand - show your hand");
-        System.out.println("\\showScore - show your score");
-        System.out.println("\\help - show available commands");
+        System.out.println("\\showHand - Show your hand");
+        System.out.println("\\showScore - Show your score");
+        System.out.println("\\help - Show available commands");
     }
 
     void showHand(Player currentPlayer){}
     void showScore(){}
     void playCard(Player currentPlayer){}
     void startGame(){
-        System.out.println("Welcome to Love Letter. Please make sure that you have " +
-                "already read the game rules before playing the game" );
-        getNumberOfPlayers();
-
+        System.out.println("Welcome to Love Letter!" );
+        getPlayersNames(getNumberOfPlayers());
         dealInitialCards();
         whoPlaysFirst();
     }
@@ -72,15 +88,14 @@ public class LoveLetterGame {
             deckOfCards.remove(0);
         }
         for (Player player : players){
-            for (int i = 0; i < 1; i++) {
-                player.drawCard(deckOfCards.get(0), deckOfCards);
-            }
+            player.drawCard(deckOfCards.get(0), deckOfCards);
         }
 
 
     }
     void playGame(){
-        System.out.println("Enter \\help to see the game's commands.");
+        System.out.println("\nA deck of Card is created. Each of you now has a card in your hand. " +
+                "Enter your game commands to play. Here are the existing commands: ");
         showCommands();
 
 
