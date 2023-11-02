@@ -3,6 +3,7 @@ In general, this game is about sending (as many) love letters as possible to a p
 # Rules
 ## 1. Set up (2 to 4 players)
 - Assemble the following cards into the deck: 
+   
    [1] Guard (5 copies)
 
    [2] Priest(2 copies)
