@@ -51,36 +51,29 @@ public class LoveLetterGame {
             do {
                 System.out.print("Enter the name for Player " + (i) + ": ");
                 playerName = scanner.nextLine();
-                /*
-                while(true){
-                if (name gueltig, muss mit einem Buchstaben anfangen)
-                store to playerName
-                break;
-                else print invalid input
-                scanner.next
-                 */
-                if (!beginWithALetter(playerName)){
+
+                if (NotBeginWithALetter(playerName)){
                     System.out.println("Invalid Input.");
                 }
                 // Check for duplicate names
                 else if (isNameUsed(usedNames, playerName)) {
                     System.out.println("Duplicate player names are not allowed. Please enter a unique name.");
                 }
-            } while (isNameUsed(usedNames, playerName) || !beginWithALetter(playerName));
+            } while (isNameUsed(usedNames, playerName) || NotBeginWithALetter(playerName));
             usedNames.add(playerName.toLowerCase());
             players.add(new Player(playerName));
         }
     }
 
-    private boolean beginWithALetter(String playerName) {
+    private boolean NotBeginWithALetter(String playerName) {
         if (playerName == null || playerName.isEmpty()) {
             // The string is empty or null, so it does not start with a letter.
-            return false;
+            return true;
         }
 
         char firstChar = playerName.charAt(0);
         // Check whether the first character is a letter.
-        return Character.isLetter(firstChar);
+        return !Character.isLetter(firstChar);
     }
 
     // Check for case-insensitive used name.
@@ -204,8 +197,8 @@ public class LoveLetterGame {
 
 
     /**
-     *
-     * @param players
+     * Find out, who were most recently on a date.
+     * @param players A List of players
      * @return an array of indices of the players, who were most recently on a date, if no one was on a date, return empty array
      */
     int[] lastOnDateIndices(ArrayList<Player> players){
@@ -253,7 +246,8 @@ public class LoveLetterGame {
         if (players.size() == 2) {
             for (int i = 0; i < 4; i++) {
                 deckOfCards.remove(0);
-            }}
+            }
+        }
         else {
             deckOfCards.remove(0);
         }
@@ -264,8 +258,10 @@ public class LoveLetterGame {
 
     }
     void playGame(){
-        System.out.println("\nA deck of Card is created. Each of you now has a card in your hand. " +
-                "Enter your game's commands to play. Here are the existing commands:\n ");
+        System.out.println("""
+
+                A deck of Card is created. Each of you now has a card in your hand. Enter your game's commands to play. Here are the existing commands:
+                \s""");
         showCommands();
 
 
@@ -278,12 +274,8 @@ public class LoveLetterGame {
             String command = scanner.next();
 
             if (command.equals("\\playCard")) {
-                if (!hasPlayedCard) {
-                    playCard(currentPlayer);
-                    hasPlayedCard = true;
-                } else {
-                    System.out.println("You have already played a card this turn. Choose another command.");
-                }
+                playCard(currentPlayer);
+                hasPlayedCard = true;
             } else if (command.equals("\\showHand")) {
                 showHand(currentPlayer);
             } else if (command.equals("\\showScore")) {
