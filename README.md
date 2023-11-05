@@ -40,11 +40,14 @@ In general, this game is about sending (as many) love letters as possible to a p
 
 
 - Who wins a round:
-   - Who has the highest number in their hand after revealing. 
-If tie, players add number of their discard pile. If still tie, all player win.
+  - Who has the highest number in their hand after revealing. If tie, players add number of their discard pile. If still tie, all player win.
   - The only one remaining in a round as the other are out.
   - Who wins the round, get a token of affection.
 
+- After a round ends:
+  - Shuffle all 16 cards together, and play a new round following all of the setup rules above. 
+  - The winner of the previous round goes first. 
+  - If there was more than one winner from the previous round as a result of a tie, then whoever of the tied players was most recently on a date goes first
 
 
     
