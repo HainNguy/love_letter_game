@@ -291,30 +291,28 @@ public class LoveLetterGame {
             boolean hasPlayedCard = false;
             // the current player draws a card on top of deck, and add it to his hand.
             Card drawnCard = currentPlayer.drawCard(deckOfCards);
-
             // prompt player, that he/she just drew 1 card x from the deck, and should enter his play command.
-            System.out.println("\n" + "It's "+ currentPlayer.getName() + "'s turn. You have just drawn a card" + drawnCard + " from the deck. Please enter your command, " +
+            System.out.println("\n" + "It's "+ currentPlayer.getName() + "'s turn." +
+                    " You have just drawn a card " + drawnCard + " from the deck." +
+                    " Please enter your command, " +
                     "or finish your turn with the command, for example \"\\playCard 1\" or see \"\\help\" :");
             currentPlayer.showHand();
-            // read input from console
-            Scanner scanner = new Scanner(System.in);
-            String input = scanner.nextLine();
-            // split the input in 2 parts, part 1 should be the command, part 2 should be the card index to be played, if \playCard is called.
-            String[] parts = input.split(" ");
-            String command = parts[0];
-            String part2 = parts[1];
+            do {
 
-            // analyse the command part, and execute the corresponding command.
-            switch (command) {
-                case "\\playCard" -> {
-                    // analyse the second part of the input, and catch exception if it's not a number 1 or 2, since each player has 2 cards in hand at a time.
+                // read input from console
+                Scanner scanner = new Scanner(System.in);
+                String command = scanner.nextLine();
+
+
+                // analyse the command, and execute the corresponding command.
+                if (command.matches("\\\\playCard\\s+\\d+")) {// analyse the number in the command and catch exception if it's not a number 1 or 2, since each player has 2 cards in hand at a time.
                     try {
                         // declare cardIndex variable to store the index of card played by the current player.
-                        int cardIndex = Integer.parseInt(part2);
-                        if (cardIndex == 1 || cardIndex == 2){
+                        int cardIndex = Integer.parseInt(command.replaceAll("\\\\playCard\\s+", ""));
+                        if (cardIndex == 1 || cardIndex == 2) {
 
                             // discard that chosen card cardIndex.
-                            Card playedCard = currentPlayer.hand.remove(cardIndex -1);
+                            Card playedCard = currentPlayer.hand.remove(cardIndex - 1);
                             // add that played card to the discard pile of the current player.
                             currentPlayer.discardPile.add(playedCard);
                             // execute that card's effect.
@@ -323,7 +321,7 @@ public class LoveLetterGame {
                             hasPlayedCard = true;
                             // Check for the end of the round, if it's the case, determine the round winner
                             // A round ends, if deck is empty at the end of a player’s turn, or all player but one are out of round.
-                            if(deckOfCards.isEmpty() || (roundPlayers.size() == 1)){
+                            if (deckOfCards.isEmpty() || (roundPlayers.size() == 1)) {
                                 // determine the round winners
                                 List<Player> roundWinners = determineRoundWinners(roundPlayers);
 
@@ -338,7 +336,7 @@ public class LoveLetterGame {
                                 }
                                 // Check, if one of the round winners has reached the tokens to win, terminate the game, else start a new round
                                 for (Player p : roundWinners) {
-                                    if (p.getTokens() == getTokensToWin()){
+                                    if (p.getTokens() == getTokensToWin()) {
                                         System.out.println("Game winner: " + p);
                                         System.out.println("Congratulations!");
                                         continueGame = false;
@@ -359,19 +357,24 @@ public class LoveLetterGame {
                                     currentPlayerIndex = determineNextCurrentPlayerIndex(roundWinners);
                                 }
                             }
-                        } else{// if that card index is other number than 1 or 2
+                        } else {// if that card index is other number than 1 or 2
                             System.out.println("Invalid Command. Use \"\\playCard 1\" or \"\\playCard 2\" ");
                         }
-                    } catch (NumberFormatException ex){
+                    } catch (NumberFormatException ex) {
                         System.out.println("Invalid Command. Use \"\\playCard 1\" or \"\\playCard 2\" ");
                     }
+                } else if (command.equals("\\showPlayers")) {
+                    showPlayers();
+                } else if (command.equals("\\showHand")) {
+                    currentPlayer.showHand();
+                } else if (command.equals("\\showScore")) {
+                    currentPlayer.showScore();
+                } else if (command.equals("\\help")) {
+                    showCommands();
+                } else {
+                    System.out.println("Invalid command. Use \"\\help\" to see the commands.");
                 }
-                case "\\showPlayers" -> showPlayers();
-                case "\\showHand" -> currentPlayer.showHand();
-                case "\\showScore" -> currentPlayer.showScore();
-                case "\\help" -> showCommands();
-                default -> System.out.println("Invalid command. Use \"\\help\" to see the commands");
-            }
+            } while(!hasPlayedCard);
             // Only pass the turn to the next person. If the current player has played a card.
             if (hasPlayedCard) {
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
