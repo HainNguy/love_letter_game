@@ -9,6 +9,15 @@ public class Player {
     ArrayList<Card> discardPile = new ArrayList<>();
     private int daysAgo; // player was daysAgo days ago on a date.
     private boolean protectedByHandmaid = false;
+
+    /**
+     * Check if player is protected by Handmaid.
+     * @return boolean
+     */
+    public boolean isProtectedByHandmaid() {
+        return protectedByHandmaid;
+    }
+
     public Player(String name) {
         this.name = name;
         this.score = 0;
