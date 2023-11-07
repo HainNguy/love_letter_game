@@ -140,5 +140,15 @@ public class Player {
     public void clearHandmaidProtection() {
         protectedByHandmaid = false;
     }
-
+    public boolean hasCardNumber(int guessedCard) {
+        try {
+            for (Card card : hand) {
+                if (card.getValue() == guessedCard) return true;
+            }
+            return false;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
 }
