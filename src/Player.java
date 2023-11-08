@@ -4,7 +4,6 @@ import java.util.Scanner;
 public class Player {
     private String name;
     ArrayList<Card> hand = new ArrayList<>();
-    private int score;
     private int tokens;
     ArrayList<Card> discardPile = new ArrayList<>();
     private int daysAgo; // player was daysAgo days ago on a date.
@@ -20,13 +19,12 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        this.score = 0;
         this.tokens = 0;
     }
 
     /**
-     * @param deckOfCards
-     * @param deckOfCards
+     * @param deckOfCards An instance from class Deck
+     *
      */
     public Card drawCard(Deck deckOfCards) {
         // Get the card on top of the deck and store it in drewCard
@@ -56,13 +54,8 @@ public class Player {
     }
 
 
-    public int getScore() {
-        return score;
-    }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
+
 
     public int getTokens() {
         return tokens;
@@ -83,19 +76,23 @@ public class Player {
     public boolean isOnDate() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("Was " + name + " on a date recently? (yes/no):");
-            String yes = "yes";
-            String no = "no";
-            String userInput = scanner.nextLine();
-            userInput = userInput.toLowerCase();
-            if (yes.equals(userInput)) {
-                return true;
-            } else if (no.equals(userInput)) {
-                setDaysAgo(Integer.MAX_VALUE);
-                return false;
-            } else {
-                System.out.println("Invalid input");
-                scanner.next();
+            try {
+                System.out.println("Was " + name + " on a date recently? (yes/no):");
+                String yes = "yes";
+                String no = "no";
+                String userInput = scanner.next();
+                userInput = userInput.toLowerCase();
+                if (yes.equals(userInput)) {
+                    return true;
+                } else if (no.equals(userInput)) {
+                    setDaysAgo(Integer.MAX_VALUE);
+                    return false;
+                } else {
+                    System.out.println("Invalid input. Please enter \"yes\" or \"no\" .");
+                    scanner.nextLine();
+                }
+            } catch (Exception ex){
+                System.out.println(ex.getMessage() + " Please enter \"yes\" or \"no\" . ");
             }
         }
     }
@@ -110,36 +107,56 @@ public class Player {
     }
 
     /**
-     * calculate Score of a list of cards
-     * @param cards
-     * @return
+     * Calculate total score of a list of cards
+     * @param cards An ArrayList of cards, which are instances of class Card.
+     * @return Total score of a list of cards.
      */
-    public int calculateScore(ArrayList<Card> cards){ return 0;
+    public int calculateScore(ArrayList<Card> cards){
+        try {
+            int sum = 0;
+            for (Card card : cards) {
+                sum = sum + card.getValue();
+            }
+            return sum;
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return 0;
+        }
     }
 
     /**
-     * get sum of hand's score and discardPile's score
-     * @return
+     * Get sum of hand's score and discardPile's score
+     * @return An integer number, which is the total score
      */
     public int getTotalScore(){
-        return calculateScore(hand) + calculateScore(discardPile);
+        try {
+            return calculateScore(hand) + calculateScore(discardPile);
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            return 0;
+        }
     }
 
 
     /**
-     * Method to protect a player with the Handmaid
+     * Protect a player with the Handmaid, set status of protection to true.
      */
     public void protectWithHandmaid() {
-        protectedByHandmaid = true;
+        this.protectedByHandmaid = true;
     }
 
     /**
-     * Method to clear Handmaid protection
+     * Disable Handmaid's protection, set status of protection to false.
      */
-
-    public void clearHandmaidProtection() {
-        protectedByHandmaid = false;
+    public void disableHandmaidProtection() {
+        this.protectedByHandmaid = false;
     }
+
+    /**
+     * Check if a player has a card with a particular card value.
+     * @param guessedCard Value of a card
+     * @return true or false
+     */
     public boolean hasCardNumber(int guessedCard) {
         try {
             for (Card card : hand) {
