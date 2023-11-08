@@ -1,6 +1,8 @@
+package Cards;
+
 public class Handmaid extends Card {
     public Handmaid (){
-        setName("Handmaid");
+        setName("Card.Handmaid");
         setValue(4);
     }
 }

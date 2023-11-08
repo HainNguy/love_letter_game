@@ -1,6 +1,8 @@
+package Cards;
+
 public class Princess extends Card {
     public Princess(){
-        setName("Princess");
+        setName("Card.Princess");
         setValue(8);
     }
 }

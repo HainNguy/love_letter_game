@@ -1,44 +1,63 @@
+import Cards.*;
 import java.util.*;
-
 public class LoveLetterGame {
-    ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
     private Deck deckOfCards;
     private int tokenToWin = 0;
     private int currentPlayerIndex = 0;
-    List<Card> removedCard = new ArrayList<>();
+
+    public ArrayList<Card> getRemovedCards() {
+        return this.removedCards;
+    }
+
+    /**
+     * Removed cards at the start of the round.
+     */
+    private ArrayList<Card> removedCards = new ArrayList<>();
+
+    /**
+     *
+     * @return - List of current players
+     */
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
 
     ArrayList<Player> eliminatedPlayers;
 
     //get number of players
 
     /**
-     * get number of players.
-      * @return
+     *
+      * @return The number of players.
      */
     public int getNumberOfPlayers() {
         Scanner scanner = new Scanner(System.in);
-        int numberOfPlayers;
-        while (true) {
-            System.out.print("Enter the number of players (2-4): ");
-            if (scanner.hasNextInt()) {
+        int numberOfPlayers = 0;
+        boolean invalidInput = true;
+        do {
+            try {
+                System.out.print("How many players are there? (2-4): ");
                 numberOfPlayers = scanner.nextInt();
                 if (numberOfPlayers >= 2 && numberOfPlayers <= 4) {
-                    return numberOfPlayers;
+                    invalidInput = false;
                 } else {
                     System.out.println("Invalid number of players. Please enter a number between 2 and 4.");
+                    scanner.nextLine();
                 }
-            } else {
+            } catch (Exception ex){
                 System.out.println("Invalid input. Please enter a valid number between 2 and 4.");
-                scanner.next();
+                scanner.nextLine();
             }
-        }
+        } while (invalidInput);
+        return numberOfPlayers;
     }
 
     /**
      *
      * @param numberOfPlayers
      */
-    void getPlayersNames(int numberOfPlayers){
+    public void getPlayersNames(int numberOfPlayers){
 
         Scanner scanner = new Scanner(System.in);
 
@@ -47,15 +66,15 @@ public class LoveLetterGame {
         for (int i = 1; i <= numberOfPlayers; i++) {
             String playerName;
             do {
-                System.out.print("Enter the name for Player " + (i) + ": ");
+                System.out.print("Enter a name for Player " + (i) + ": ");
                 playerName = scanner.nextLine();
 
                 if (NotBeginWithALetter(playerName)){
-                    System.out.println("Invalid Input.");
+                    System.out.println("Invalid Input. Your name must start with a letter.");
                 }
                 // Check for duplicate names
                 else if (isNameUsed(usedNames, playerName)) {
-                    System.out.println("Duplicate player names are not allowed. Please enter a unique name.");
+                    System.out.println("Duplicate player names are not allowed. Please enter an unique name.");
                 }
             } while (isNameUsed(usedNames, playerName) || NotBeginWithALetter(playerName));
             usedNames.add(playerName.toLowerCase());
@@ -64,9 +83,9 @@ public class LoveLetterGame {
     }
 
     /**
-     * Check if player name does not begin with a letter.
-     * @param playerName
-     * @return true, if player name does not begin with a letter, else false
+     * Check if player's name does not begin with a letter.
+     * @param playerName  name of player
+     * @return true, if player name does not begin with a letter, else false.
      */
     private boolean NotBeginWithALetter(String playerName) {
         if (playerName == null || playerName.isEmpty()) {
@@ -83,9 +102,9 @@ public class LoveLetterGame {
 
     /**
      *
-     * @param usedNames
-     * @param name
-     * @return
+     * @param usedNames a collection of used names
+     * @param name name to check for duplicate
+     * @return true, if name is already used, otherwise false
      */
     private boolean isNameUsed(Set<String> usedNames, String name){
         // Convert the provided name to lowercase for case-insensitive comparison
@@ -110,22 +129,41 @@ public class LoveLetterGame {
     void startGame(){
         System.out.println("Welcome to Love Letter!" );
         int numberOfPlayers = getNumberOfPlayers();
+        setTokenToWin(calculateTokensToWin(numberOfPlayers));
         getPlayersNames(numberOfPlayers);
-        setTokenToWin(numberOfPlayers);
-        dealInitialCards();
         whoPlaysFirst(players);
+        dealInitialCards();
+
+    }
+
+    /**
+     * Calculate number of token to win according to the number of players
+     * @param numberOfPlayers - number of players.
+     * @return Number of tokens to win the game.
+     */
+    private int calculateTokensToWin(int numberOfPlayers) {
+        System.out.println("Calculating number of tokens to win...");
+        int tokensToWin = 0;
+        switch (numberOfPlayers){
+            case 2: tokensToWin = 7;
+            case 3: tokensToWin = 5;
+            case 4: tokensToWin = 4;
+        }
+        System.out.println("To win the game you have to collect " + tokensToWin + " tokens.");
+        return tokensToWin;
     }
 
     /**
      * decide who plays first, then reference the corresponding current player index with that player
      * @param players
      */
-    void whoPlaysFirst(ArrayList<Player> players){
-        System.out.println("\nNow it's going to be determined who will play first.");
+    private void whoPlaysFirst(ArrayList<Player> players){
+        System.out.println("\nNow it's going to be determined who will play first...");
         int[] lastOnDateIndices = lastOnDateIndices(players);
         if(lastOnDateIndices.length == 1){
             currentPlayerIndex = lastOnDateIndices[0];
-            System.out.println("\nSo, " + players.get(currentPlayerIndex).getName() + " will play first.");
+            System.out.println("Because " + players.get(currentPlayerIndex).getName() + " is the only one, who was on a date recently.");
+            System.out.println("So, " + players.get(currentPlayerIndex).getName() + " will play first.");
         }
         else {
             System.out.println("Because there is either no person, who has been on a date recently or several, who have been on a date on the same day," +
@@ -226,7 +264,7 @@ public class LoveLetterGame {
                         player.setDaysAgo(scanner.nextInt());
                         continueAsk = false;
                     } else {
-                        System.out.println("Invalid Input.");
+                        System.out.println("Invalid Input. Please enter a number.");
                         scanner.nextLine();
                     }
                 } while(continueAsk);
@@ -249,26 +287,24 @@ public class LoveLetterGame {
     }
 
     /**
-     * remove a number of card according to the rule, then give each player a card.
+     * Remove a number of cards according to the number of players, then deal each player a card.
      */
-    void dealInitialCards() {
+    private void dealInitialCards() {
         this.deckOfCards = new Deck();
         deckOfCards.shuffleDeck();
         //If there are 2 players, 4 cards will be removed from deck.
         if (players.size() == 2) {
             for (int i = 0; i < 4; i++) {
-                removedCard.add(deckOfCards.remove(0));
+                getRemovedCards().add(deckOfCards.remove(0));
             }
         }
         else { // otherwise one card will be removed from the top of deck
-            removedCard.add(deckOfCards.remove(0));
+            getRemovedCards().add(deckOfCards.remove(0));
         }
         // Each player draw an initial card from the deck
         for (Player player : players){
             player.drawCard(deckOfCards);
         }
-
-
     }
 
     /**
@@ -277,7 +313,7 @@ public class LoveLetterGame {
     void playGame(){
         System.out.println("""
 
-                A deck of Card has been created. Each of you now has a card in your hand.
+                A deck of cards has been created. Each of you now has a card in your hand.
                 Enter your game's commands to play. Here are the existing commands:
                 """);
         showCommands();
@@ -312,7 +348,7 @@ public class LoveLetterGame {
                         if (cardIndex == 1 || cardIndex == 2) {
 
                             // discard that chosen card cardIndex.
-                            Card playedCard = currentPlayer.hand.remove(cardIndex - 1);
+                            Card playedCard = currentPlayer.getHand().remove(cardIndex - 1);
                             // add that played card to the discard pile of the current player.
                             currentPlayer.discardPile.add(playedCard);
                             // execute that card's effect.
@@ -348,7 +384,7 @@ public class LoveLetterGame {
                                     roundPlayers = new ArrayList<>(players);
                                     // clear the hand and the discard pile of each player,
                                     for (Player p : players) {
-                                        p.hand.clear();
+                                        p.getHand().clear();
                                         p.discardPile.clear();
                                     }
                                     // create new deck and deal initial cards
@@ -461,7 +497,7 @@ public class LoveLetterGame {
         // Get notProtectedPlayers, who can be chosen as target by a player, since a protected player can not be chosen.
         ArrayList<Player> notProtectedPlayers = getNotProtectedPlayers(roundPlayers);
         Scanner scanner = new Scanner(System.in);
-        if (playedCard.getName().equals("Guard")) {
+        if (playedCard.getName().equals("Card.Guard")) {
 //            System.out.print(currentPlayer.getName() + ", choose a player to guess a card (1-" + players.size() + "): ");
 //            int targetPlayerIndex = scanner.nextInt() - 1;
 //            Player targetPlayer = players.get(targetPlayerIndex);
@@ -484,7 +520,7 @@ public class LoveLetterGame {
                 try {
                     if (notProtectedPlayers.size() < roundPlayers.size()) {
                         System.out.println(currentPlayer.getName() + ",choose only one of these following players to guess a card " +
-                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Handmaid: ");
+                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Card.Handmaid: ");
                         showPlayers(notProtectedPlayers);
                     } else {
                         System.out.println(currentPlayer.getName() + ",choose one of these following players to guess a card " +
@@ -540,18 +576,18 @@ public class LoveLetterGame {
                 System.out.println(ex.getMessage());
             }
 
-        } else if (playedCard.getName().equals("Priest")) {
+        } else if (playedCard.getName().equals("Card.Priest")) {
 
 
             boolean invalidInput = true;
             do {
                 try {
                     if (notProtectedPlayers.size() < roundPlayers.size()) {
-                        System.out.println(currentPlayer.getName() + ", you can only choose one of these following players's hands to look at " +
-                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Handmaid: ");
+                        System.out.println(currentPlayer.getName() + ", you can only choose one of these following player's hands to look at " +
+                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Card.Handmaid: ");
                         showPlayers(notProtectedPlayers);
                     } else {
-                        System.out.println(currentPlayer.getName() + ", you can choose one of these following players's hands to look at " +
+                        System.out.println(currentPlayer.getName() + ", you can choose one of these following player's hands to look at " +
                                 "(1-" + notProtectedPlayers.size() + "): ");
                         showPlayers(notProtectedPlayers);
                     }
@@ -578,7 +614,7 @@ public class LoveLetterGame {
 
             } while (invalidInput);
 
-        } else if (playedCard.getName().equals("Baron")) {
+        } else if (playedCard.getName().equals("Card.Card.Baron")) {
 
 
             boolean invalidInput = true;
@@ -586,7 +622,7 @@ public class LoveLetterGame {
                 try {
                     if (notProtectedPlayers.size() < roundPlayers.size()) {
                         System.out.println(currentPlayer.getName() + ", choose only one of these following players to compare hands with " +
-                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Handmaid: ");
+                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Card.Handmaid: ");
                         showPlayers(notProtectedPlayers);
                     } else {
                         System.out.println(currentPlayer.getName() + ", choose one of these following players to compare hands with " +
@@ -626,72 +662,112 @@ public class LoveLetterGame {
 
             } while (invalidInput);
 
-        } else if (playedCard.getName().equals("Handmaid")) {
+        } else if (playedCard.getName().equals("Card.Handmaid")) {
             currentPlayer.protectWithHandmaid();
-            System.out.println(currentPlayer.getName() + " is protected by the Handmaid until their next turn.");
-        } else if (playedCard.getName().equals("Prince")) {
+            System.out.println(currentPlayer.getName() + " is protected by the Card.Handmaid until their next turn.");
+        } else if (playedCard.getName().equals("Card.Prince")) {
             //Choose a player, he discards his hand and draw a new card
             boolean invalidInput = true;
             do {
                 try {
-                    System.out.print(currentPlayer.getName() + ", choose a player to make them discard their hand (1-" + roundPlayers.size() + "): ");
+                    // Pick a non-protected player
+                    if (notProtectedPlayers.size() < roundPlayers.size()) {
+                        System.out.println(currentPlayer.getName() + ", choose only one of these following players to make them discard their hand " +
+                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by Card.Handmaid: ");
+                        showPlayers(notProtectedPlayers);
+                    } else {
+                        System.out.println(currentPlayer.getName() + ", choose one of these following players to discard their hand " +
+                                "(1-" + notProtectedPlayers.size() + "): ");
+                        showPlayers(notProtectedPlayers);
+                    }
                     int targetPlayerIndex = scanner.nextInt() - 1;
-                    if (targetPlayerIndex < roundPlayers.size()) {
-                        Player targetPlayer = roundPlayers.get(targetPlayerIndex);
+                    // Valid player is chosen
+                    if (targetPlayerIndex < notProtectedPlayers.size()){
+                        Player targetPlayer = notProtectedPlayers.get(targetPlayerIndex);
                         System.out.println(currentPlayer.getName() + " makes " + targetPlayer.getName() + " discard their hand.");
-                        // Discard the hand of the target player
-                        targetPlayer.hand.clear();
-                        // Draw a new card for the target player from the deck
-                        if (!deck.isEmpty()) {
-                            targetPlayer.drawCard(deck);
+                        if (targetPlayer.hasCardNumber(8)){
+                            targetPlayer.getHand().clear();
+                            System.out.println(targetPlayer.getName() + ", Your hand is discarded. Because a Card.Princess was in your hand, you has been eliminated from the round.");
+                            roundPlayers.remove(targetPlayer);
                         } else {
-                            // If the deck is empty, draw the previously removed card (if available)
-                            if (removedCard != null) {
-                                targetPlayer.hand.add(removedCard.get(0));
+                            targetPlayer.getHand().clear();
+                            System.out.println(targetPlayer.getName() + ", Your hand is discarded.");
+                            if (deckOfCards.isEmpty()){
+                                Card newCard = targetPlayer.drawCard(getRemovedCards());
+                                System.out.println("Since the deck is empty, you've got a new card" + newCard.getName() +
+                                        " from the removed cards at the start of the round.");
+                            } else {
+                                Card newCard = targetPlayer.drawCard(deckOfCards);
+                                System.out.println("You've got a new card " + newCard.getName() + " from the deck.");
                             }
                         }
-                        System.out.println(targetPlayer + ", after your hand is discarded, you've got now a new hand.");
-                        targetPlayer.showHand();
                         invalidInput = false;
-                    } else System.out.println("Invalid Input.");
+                    } else {
+                        System.out.println("Invalid Input. Please enter a correct player (1-" + notProtectedPlayers.size() + ").");
+                        scanner.nextLine();
+                    }
                 } catch (Exception ex){
-                    System.out.println("Invalid Input.");
+                    System.out.println(ex.getMessage() + ". Please enter a correct player (1-" + notProtectedPlayers.size() +").");
+                    scanner.nextLine();
                 }
             } while(invalidInput);
-        } else if (playedCard.getName().equals("King")) {
-            //Trade hand with another player
+        } else if (playedCard.getName().equals("Card.King")) {
             boolean invalidInput = true;
             do {
                 try {
-                    System.out.print(currentPlayer.getName() + ", choose a player to trade hands with (1-" + roundPlayers.size() + "): ");
+                    // Pick a non-protected player
+                    if (notProtectedPlayers.size() < roundPlayers.size()) {
+                        System.out.println(currentPlayer.getName() + ", choose only one of these following players to trade hands with " +
+                                "(1-" + notProtectedPlayers.size() + "), since the other players are protected by the Card.Handmaid: ");
+                        showPlayers(notProtectedPlayers);
+                    } else {
+                        System.out.println(currentPlayer.getName() + ", choose one of these following players to trade hands with " +
+                                "(1-" + notProtectedPlayers.size() + "): ");
+                        showPlayers(notProtectedPlayers);
+                    }
                     int targetPlayerIndex = scanner.nextInt() - 1;
-                    if (targetPlayerIndex < roundPlayers.size()){
-                        Player targetPlayer = roundPlayers.get(targetPlayerIndex);
-                        System.out.println(currentPlayer.getName() + " trades hands with " + targetPlayer.getName());
-                        List<Card> tempHand = new ArrayList<>(currentPlayer.hand);
-                        currentPlayer.hand.clear();
-                        currentPlayer.hand.addAll(targetPlayer.hand);
-                        targetPlayer.hand.clear();
-                        targetPlayer.hand.addAll(tempHand);
+                    // Valid player is chosen
+                    if (targetPlayerIndex < notProtectedPlayers.size()){
+                        Player targetPlayer = notProtectedPlayers.get(targetPlayerIndex);
+                        System.out.println( currentPlayer.getName() + " has chosen " + targetPlayer.getName() + " to trade hand with.");
+                        System.out.println(" Trading hands...");
+                        tradeHands(currentPlayer, targetPlayer);
+                        System.out.println("Hands traded.");
+                        System.out.print("Now, "); currentPlayer.showHand(); targetPlayer.showHand();
                         invalidInput = false;
-                    } else System.out.println("Invalid Input.");
+                    } else {
+                        System.out.println("Invalid Input. Please enter a correct player (1-" + notProtectedPlayers.size() + ").");
+                        scanner.nextLine();
+                    }
+                } catch (Exception ex){
+                    System.out.println(ex.getMessage() + ". Please enter a correct player (1-" + notProtectedPlayers.size() +").");
+                    scanner.nextLine();
                 }
-                catch (Exception ex){
-                    System.out.println("Invalid Input.");
-                }
-            } while (invalidInput);
-        } else if (playedCard.getName().equals("Countess")) {
-            // No specific effect; must be played if the player has a King or Prince.
-        } else if (playedCard.getName().equals("Princess")) {
-            System.out.println(currentPlayer.getName() + " has been eliminated for discarding the Princess.");
+            } while(invalidInput);
+        } else if (playedCard.getName().equals("Card.Countess")) {
+            System.out.println(currentPlayer.getName() + " has played Card.Countess.");
+        } else if (playedCard.getName().equals("Card.Princess")) {
+            System.out.println(currentPlayer.getName() + " has been eliminated for discarding the Card.Princess.");
             roundPlayers.remove(currentPlayer);
         }
     }
 
+    private void tradeHands(Player currentPlayer, Player targetPlayer) {
+        try {
+            List<Card> tempHand = new ArrayList<>(currentPlayer.getHand());
+            currentPlayer.getHand().clear();
+            currentPlayer.getHand().addAll(targetPlayer.getHand());
+            targetPlayer.getHand().clear();
+            targetPlayer.getHand().addAll(tempHand);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     /**
-     * Get players, who are not protected by Handmaid.
+     * Get players, who are not protected by Cards.Handmaid.
      * @param players
-     * @return List of not pretected players.
+     * @return List of not protected players.
      */
     private ArrayList<Player> getNotProtectedPlayers(ArrayList<Player> players) {
         ArrayList<Player> result = new ArrayList<>();
@@ -717,7 +793,7 @@ public class LoveLetterGame {
         int highestValue = Integer.MIN_VALUE;
         ArrayList<Player> result = new ArrayList<>();
         for (Player player : playersToCompare) {
-            int playerScore = player.calculateScore(player.hand);
+            int playerScore = player.calculateScore(player.getHand());
             if (playerScore > highestValue) {
                 if (result.size() > 0) {
                     result.clear();
@@ -740,8 +816,7 @@ public class LoveLetterGame {
     }
 
     /**
-     * set Token To Win
-     * @param tokenToWin
+     * @param tokenToWin- number of tokens to win
      */
     public void setTokenToWin(int tokenToWin) {
         this.tokenToWin = tokenToWin;

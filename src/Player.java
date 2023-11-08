@@ -1,16 +1,25 @@
+import Cards.Card;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Player {
     private String name;
-    ArrayList<Card> hand = new ArrayList<>();
+    private ArrayList<Card> getHand = new ArrayList<>();
     private int tokens;
     ArrayList<Card> discardPile = new ArrayList<>();
     private int daysAgo; // player was daysAgo days ago on a date.
     private boolean protectedByHandmaid = false;
 
     /**
-     * Check if player is protected by Handmaid.
+     * @return Hand of player.
+     */
+    public ArrayList<Card> getHand() {
+        return this.getHand;
+    }
+
+    /**
+     * Check if player is protected by Card.Handmaid.
      * @return boolean
      */
     public boolean isProtectedByHandmaid() {
@@ -23,17 +32,17 @@ public class Player {
     }
 
     /**
-     * @param deckOfCards An instance from class Deck
+     * @param deckOfCards An instance from class Card.Deck
      *
      */
-    public Card drawCard(Deck deckOfCards) {
+    public Card drawCard(ArrayList<Card> deckOfCards) {
         // Get the card on top of the deck and store it in drewCard
         Card drawnCard = deckOfCards.get(0);
         // remove that drew card from the deck
         deckOfCards.remove(0);
         // add that card to the hand of player
-        hand.add(drawnCard);
-        // return the drawn Card
+        getHand.add(drawnCard);
+        // return the drawn Card.Card
         return drawnCard;
     }
 
@@ -88,27 +97,27 @@ public class Player {
                     setDaysAgo(Integer.MAX_VALUE);
                     return false;
                 } else {
-                    System.out.println("Invalid input. Please enter \"yes\" or \"no\" .");
+                    System.out.println("Invalid input. Please enter \"yes\" or \"no\".");
                     scanner.nextLine();
                 }
             } catch (Exception ex){
-                System.out.println(ex.getMessage() + " Please enter \"yes\" or \"no\" . ");
+                System.out.println("Invalid Input. Please enter \"yes\" or \"no\".");
             }
         }
     }
     public void showHand(){
         System.out.println(name + "'s hand is: ");
-        for (int i = 0; i < hand.size(); i++) {
-            System.out.println((i + 1) + ". " + hand.get(i).getName());
+        for (int i = 0; i < getHand.size(); i++) {
+            System.out.println((i + 1) + ". " + getHand.get(i).getName());
         }
     }
     public void showScore(){
-        System.out.println(this.name + "'s score: " + calculateScore(this.hand));
+        System.out.println(this.name + "'s score: " + calculateScore(this.getHand));
     }
 
     /**
      * Calculate total score of a list of cards
-     * @param cards An ArrayList of cards, which are instances of class Card.
+     * @param cards An ArrayList of cards, which are instances of class Card.Card.
      * @return Total score of a list of cards.
      */
     public int calculateScore(ArrayList<Card> cards){
@@ -130,7 +139,7 @@ public class Player {
      */
     public int getTotalScore(){
         try {
-            return calculateScore(hand) + calculateScore(discardPile);
+            return calculateScore(getHand) + calculateScore(discardPile);
         } catch (Exception ex){
             System.out.println(ex.getMessage());
             return 0;
@@ -139,14 +148,14 @@ public class Player {
 
 
     /**
-     * Protect a player with the Handmaid, set status of protection to true.
+     * Protect a player with the Card.Handmaid, set status of protection to true.
      */
     public void protectWithHandmaid() {
         this.protectedByHandmaid = true;
     }
 
     /**
-     * Disable Handmaid's protection, set status of protection to false.
+     * Disable Card.Handmaid's protection, set status of protection to false.
      */
     public void disableHandmaidProtection() {
         this.protectedByHandmaid = false;
@@ -159,7 +168,7 @@ public class Player {
      */
     public boolean hasCardNumber(int guessedCard) {
         try {
-            for (Card card : hand) {
+            for (Card card : getHand) {
                 if (card.getValue() == guessedCard) return true;
             }
             return false;

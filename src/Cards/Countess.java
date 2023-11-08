@@ -1,6 +1,8 @@
+package Cards;
+
 public class Countess extends Card {
     public Countess(){
-        setName("Countess");
+        setName("Card.Countess");
         setValue(7);
     }
 }
