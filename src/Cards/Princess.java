@@ -2,7 +2,7 @@ package Cards;
 
 public class Princess extends Card {
     public Princess(){
-        setName("Card.Princess");
+        setName("Princess");
         setValue(8);
     }
 }

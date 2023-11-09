@@ -2,7 +2,7 @@ package Cards;
 
 public class Countess extends Card {
     public Countess(){
-        setName("Card.Countess");
+        setName("Countess");
         setValue(7);
     }
 }

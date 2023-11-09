@@ -10,6 +10,10 @@ public class Player {
     ArrayList<Card> discardPile = new ArrayList<>();
     private int daysAgo; // player was daysAgo days ago on a date.
     private boolean protectedByHandmaid = false;
+    /**
+     * true if player is still active in a round, false if player is out of the round.
+     */
+    private boolean active = true;
 
     /**
      * @return Hand of player.
@@ -133,6 +137,10 @@ public class Player {
         }
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     /**
      * Get sum of hand's score and discardPile's score
      * @return An integer number, which is the total score
@@ -176,5 +184,9 @@ public class Player {
             System.out.println(ex.getMessage());
             return false;
         }
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
