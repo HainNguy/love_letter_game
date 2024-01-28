@@ -1,4 +1,4 @@
-# This is my first project about a board game Love Letter from the software development internship at the LMU. The game Love Letter was developed in Java using the following game rules. The goal of the project is to apply and deepen the concept of object-oriented programming. The game will be played on the console.
+# This is my first project about a board game, Love Letter from the software development internship at the LMU. The game Love Letter was developed in Java using the following game rules. The goal of the project is to apply and deepen the concept of object-oriented programming. The game will be played on the console.
 
 
 
