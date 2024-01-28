@@ -1,6 +1,14 @@
-# "Love Letter" implemented in Java.
-In general, this game is about sending (as many) love letters as possible to a princess.
-# Rules
+# This is my first project about a board game Love Letter from the software development internship at the LMU. The game Love Letter was developed in Java using the following game rules. The goal of the project is to apply and deepen the concept of object-oriented programming. The game will be played on the console.
+
+
+
+
+
+
+
+## Rules: In general, this game is about sending (as many) love letters as possible to a princess.
+The original rule can be found [hier](http://alderac.com/wp-content/uploads/2017/11/Love-Letter-Premium_Rulebook.pdf).
+
 ## 1. Set up (2 to 4 players)
 - Assemble the following cards into the deck: 
    
