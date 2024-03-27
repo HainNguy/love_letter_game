@@ -12,23 +12,23 @@ The original rule can be found [hier](http://alderac.com/wp-content/uploads/2017
 ## 1. Set up (2 to 4 players)
 - Assemble the following cards into the deck: 
    
-   [1] Cards.Guard (5 copies)
+   [1] Guard (5 copies)
 
-   [2] Cards.Priest(2 copies)
+   [2] Priest(2 copies)
 
-   [3] Cards.Cards.Baron(2 copies)
+   [3] Baron(2 copies)
 
-   [4] Cards.Handmaid(2 copies)
+   [4] Handmaid(2 copies)
 
-   [5] Cards.Prince(2 copies)
+   [5] Prince(2 copies)
 
-   [6] Cards.King
+   [6] King
 
-   [7] Cards.Countess
+   [7] Countess
 
-   [8] Cards.Princess
+   [8] Princess
    
-   [x]: The higher x is, the closer that person is to the Cards.Princess.
+   [x]: The higher x is, the closer that person is to the Princess.
 
 - 	Shuffle these 16 cards. Remove the top card of the deck from the game and place it aside
 - By 2-player games take 3 more cards and place aside
@@ -43,7 +43,7 @@ The original rule can be found [hier](http://alderac.com/wp-content/uploads/2017
   - 4 tokens, if 4 players
 
 - When does a round end: 
-  - Cards.Deck is empty at the end of a player’s turn
+  - Deck is empty at the end of a player’s turn
   - All player but one are out of round
 
 
@@ -61,28 +61,28 @@ The original rule can be found [hier](http://alderac.com/wp-content/uploads/2017
     
 -	Description of a turn:
      - Draw the first card from a deck and add it to your hand.
-     - 	Choose one of two card in your hand and discard it.
+     - Choose one of two card in your hand and discard it.
      - Apply its effect.
      - All discard card remain in front of the player(Skat)
      - After applying pass turn to the next player on your left
 
 
 ## 3. Meaning of cards
-[8]**Cards.Princess**: Lose if discarded.
+[8]**Princess**: Lose if discarded.
 
-[7]**Cards.Countess**: Must be played if you have Cards.King or Cards.Prince in hand
+[7]**Countess**: Must be played if you have Cards.King or Cards.Prince in hand
 
-[6]**Cards.King**: Trade hand with another player	
+[6]**King**: Trade hand with another player	
 
-[5]**Cards.Prince**: Choose a player, he discards his hand and draw a new card
+[5]**Prince**: Choose a player, he discards his hand and draw a new card
 
-[4]**Cards.Handmaid**: You cannot be chosen until your next turn
+[4]**Handmaid**: You cannot be chosen until your next turn
 
-[3]**Cards.Cards.Baron**: Compare hand with another player, lower number is out
+[3]**Baron**: Compare hand with another player, lower number is out
 
-[2]**Cards.Priest**: Look at an other player’s hand
+[2]**Priest**: Look at an other player’s hand
 
-[1]**Cards.Guard**: Guess a player’s hand, if correct, the player is out
+[1]**Guard**: Guess a player’s hand, if correct, the player is out
 
 For more details of the rules see [this link.](http://alderac.com/wp-content/uploads/2017/11/Love-Letter-Premium_Rulebook.pdf)
 
